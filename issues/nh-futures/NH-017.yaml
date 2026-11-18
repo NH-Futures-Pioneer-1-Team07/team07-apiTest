@@ -1,0 +1,37 @@
+id: NH-017
+title: 국내 차트(일봉·분봉) 조회 기간을 지정하면 nxt_key 가 무시되어 같은 페이지와 같은 nxt_key 가 반복됨
+apis:
+- domestic_chart-daily
+- domestic_chart-minute
+team: team-07
+first_seen: '2026-11-19'
+reported_at: null
+answered_at: null
+report_status: 발견
+conclusion: null
+symptom: |
+  기간(inq_strt_dt·inq_ed_dt)을 지정하면 nxt_key 를 무엇으로 보내도 기간 전체가 같은 내용으로 다시 오고, 응답 nxt_key 도 같은 값이 반복된다. 모두 HTTP 200, 오류 코드 없음.
+  - 5분봉 (A676C000) 20261117 하루, nxt_key 99999999 → 83봉, 15:45 ~ 08:45, nxt_key 20261117084500
+  - 같은 요청, nxt_key 20261117084500 (받은 키) → 같은 83봉, 같은 nxt_key
+  - 같은 요청, nxt_key 20261117120000 (임의 값) → 같은 83봉, 같은 nxt_key
+  - 일봉 20261102 ~ 20261113, nxt_key 99999999 → 9봉, 11-12 ~ 11-02, nxt_key 20261102
+  - 같은 요청, nxt_key 20261102 (받은 키) → 같은 9봉, 같은 nxt_key
+  비교: 기간을 지정하지 않으면 nxt_key 가 적용된다. 5분봉 req_qty 10 → 14:50 까지, 다음 키로 14:45 ~ 14:00. 일봉 → 105봉, 다음 키 20260617 로 요청하면 0봉, nxt_key "0"
+  기간을 지정하면 req_qty 도 무시된다 (일봉 req_qty 5 → 12봉, 5분봉 req_qty 10 → 166봉)
+  해외 차트는 데이터가 있는 마지막 페이지에서 nxt_key 가 32자리 모두 9 (NH-005)
+  기대 결과: 기간 안의 봉을 모두 받으면 마지막 페이지임을 알 수 있는 nxt_key 가 오고, 그 키로 요청해도 같은 페이지가 다시 오지 않음
+  영향: 명세대로 nxt_key 를 따라가는 코드가 기간 조회에서 무한 반복함. 마지막 페이지를 알 방법이 없음
+  확인일: 2026-11-19 모의 서버
+  재현 기록: issues/nh-futures/evidence/NH-017/README.md
+nh_answer: null
+rules:
+- 국내 차트를 기간으로 조회하면 한 번만 요청한다. nxt_key 로 이어 받지 않는다
+- 국내 차트를 기간 없이 조회할 때는 0봉 페이지 또는 nxt_key "0" 에서 멈춘다
+pending:
+- 기간 지정 시 nxt_key 로 이어 받는 방식이 지원되는지
+- 국내 차트의 마지막 페이지 표시 방식 (기간 없음은 0봉 뒤 "0", 해외는 9로만 된 값)
+- 기간이 한 페이지 최대 건수를 넘으면 나머지를 어떻게 받는지
+cases:
+- TC-019
+- TC-020
+evidence: issues/nh-futures/evidence/NH-017

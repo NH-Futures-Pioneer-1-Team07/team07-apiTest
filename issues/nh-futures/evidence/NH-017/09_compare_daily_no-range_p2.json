@@ -1,0 +1,33 @@
+{
+  "requested_at": "2026-11-19T06:24:21+09:00",
+  "request": {
+    "method": "POST",
+    "url": "https://apidemo.futures.co.kr/trade/v1/domestic/chart-daily",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer eyJr••••••"
+    },
+    "body": {
+      "nght_tp": "1",
+      "sym": "A676C000",
+      "cidx_yn": "0",
+      "req_qty": "999",
+      "nxt_key": "20260617"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "date": "Wed, 18 Nov 2026 21:24:21 GMT",
+      "content-type": "application/json",
+      "content-length": "57"
+    },
+    "duration_ms": 30,
+    "body": {
+      "nxt_key": "0",
+      "nrec": "0",
+      "sym": "A676C000",
+      "nght_tp": "1"
+    }
+  }
+}

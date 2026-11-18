@@ -1,0 +1,14 @@
+id: TC-020
+name: 국내 일봉 마지막 페이지
+description: 국내 일봉을 기간(2026-11-02~11-13)으로 조회해 nxt_key 를 따라간다. 마지막 페이지에서 끝을 알리는 키가 와야 한다. 2026-11-19 확인 시 마지막 봉 날짜(20261102)가 nxt_key 로 오고, 그 키로 요청하면 같은 페이지가 다시 왔다. 기간 없이 조회하면 마지막 페이지 뒤에 0건 페이지와 nxt_key "0" 이 온다.
+tags: [시세, 페이지]
+issue: NH-017
+issue_result: fail
+steps:
+  - name: 국채10년 일봉 11-02~11-13
+    api: domestic_chart-daily
+    body: {nght_tp: "1", sym: A676C000, inq_strt_dt: "20261102", inq_ed_dt: "20261113", req_qty: "999", cidx_yn: "0", nxt_key: "99999999"}
+    paginate: {next_key: nxt_key, rows: Occurs1, max_pages: 5, expect_all: [{count: {path: rows, gte: 9}}]}
+    expect:
+      - status: 200
+      - error_code: none

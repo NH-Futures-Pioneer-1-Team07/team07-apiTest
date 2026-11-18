@@ -1,0 +1,14 @@
+id: TC-019
+name: 국내 분봉 기간 조회 마지막 페이지
+description: 국내 분봉을 하루(2026-11-17)로 조회해 nxt_key 를 따라간다. 마지막 페이지에서는 끝을 알리는 키가 와야 한다. 2026-11-19 확인 시 마지막 봉 시각(20261117084500)이 nxt_key 로 오고, 그 키로 요청하면 같은 83봉이 같은 키와 함께 다시 와서 끝나지 않았다. 관련 NH-005(해외 분봉은 9로만 된 키가 끝).
+tags: [시세, 페이지]
+issue: NH-017
+issue_result: fail
+steps:
+  - name: 국채10년 5분봉 11-17
+    api: domestic_chart-minute
+    body: {nght_tp: "1", sym: A676C000, inq_strt_dt: "20261117", strt_tm: "000000", inq_ed_dt: "20261117", ed_tm: "235959", req_qty: "2000", dcnt: "5", cidx_yn: "0", nxt_key: "99999999"}
+    paginate: {next_key: nxt_key, rows: Occurs1, max_pages: 5, expect_all: [{count: {path: rows, eq: 83}}]}
+    expect:
+      - status: 200
+      - error_code: none
