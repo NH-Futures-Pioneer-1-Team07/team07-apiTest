@@ -24,7 +24,8 @@ ZN = {"exch_cd": "FCME", "sym": "ZNZ26", "req_qty": "2000", "nxt_key": "99999999
 ZN_5M = {**ZN, "dcnt": "5", "cidx_yn": "0"}
 KTB = {"nght_tp": "1", "sym": "A676C000"}
 KTB_5M_1117 = {**KTB, "inq_strt_dt": "20261117", "strt_tm": "000000", "inq_ed_dt": "20261117", "ed_tm": "235959", "req_qty": "2000", "dcnt": "5", "cidx_yn": "0"}
-KTB_D_1102 = {**KTB, "inq_strt_dt": "20261102", "inq_ed_dt": "20261113", "req_qty": "999", "cidx_yn": "0"}
+KTB_5M_WIDE = {**KTB_5M_1117, "inq_strt_dt": "20260901", "inq_ed_dt": "20261118"}
+KTB_D_1102 ={**KTB, "inq_strt_dt": "20261102", "inq_ed_dt": "20261113", "req_qty": "999", "cidx_yn": "0"}
 
 # 제보별 재현 요청: (파일 이름, 설명, API, 본문, 끝까지 페이지 넘김)
 PLANS: dict[str, list[tuple[str, str, str, dict[str, Any], bool]]] = {
@@ -61,6 +62,8 @@ PLANS: dict[str, list[tuple[str, str, str, dict[str, Any], bool]]] = {
         ("09_compare_daily_no-range_p2", "비교: 국내 일봉, 기간 없음, nxt_key 20260617 → 0봉, nxt_key 0", "domestic_chart-daily", {**KTB, "cidx_yn": "0", "req_qty": "999", "nxt_key": "20260617"}, False),
         ("10_req-qty_daily_1102-1118_q5", "참고: 국내 일봉, 20261102~20261118, req_qty 5 → 기간 전체", "domestic_chart-daily", {**KTB, "cidx_yn": "0", "req_qty": "5", "inq_strt_dt": "20261102", "inq_ed_dt": "20261118", "nxt_key": "99999999"}, False),
         ("11_req-qty_5min_1117-1118_q10", "참고: 국내 5분봉, 20261117~20261118, req_qty 10 → 기간 전체", "domestic_chart-minute", {**KTB, "dcnt": "5", "cidx_yn": "0", "req_qty": "10", "inq_strt_dt": "20261117", "strt_tm": "000000", "inq_ed_dt": "20261118", "ed_tm": "235959", "nxt_key": "99999999"}, False),
+        ("12_5min_0901-1118_nxt-default", "넓은 기간: 국내 5분봉, 20260901~20261118 → 2000봉에서 잘림", "domestic_chart-minute", {**KTB_5M_WIDE, "nxt_key": "99999999"}, False),
+        ("13_5min_0901-1118_nxt-received", "넓은 기간: 같은 요청, 받은 nxt_key 20261015150000 → 같은 2000봉, 나머지 못 받음", "domestic_chart-minute", {**KTB_5M_WIDE, "nxt_key": "20261015150000"}, False),
     ],
 }
 
