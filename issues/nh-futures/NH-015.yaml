@@ -4,9 +4,9 @@ apis:
 - domestic_chart-daily
 team: team-07
 first_seen: '2026-11-19'
-reported_at: null
+reported_at: '2026-11-19'
 answered_at: null
-report_status: 발견
+report_status: 제보 완료
 conclusion: null
 symptom: |
   최신 명세(2026-11-19 엑셀)는 req_qty 「기본 300건 (최대 999건)」인데, 999 를 넘는 요청도 거절하지 않고 더 많이 준다.

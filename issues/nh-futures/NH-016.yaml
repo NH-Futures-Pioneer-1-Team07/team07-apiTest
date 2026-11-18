@@ -5,9 +5,9 @@ apis:
 - overseas_chart-minute
 team: team-07
 first_seen: '2026-11-19'
-reported_at: null
+reported_at: '2026-11-19'
 answered_at: null
-report_status: 발견
+report_status: 제보 완료
 conclusion: null
 symptom: |
   종료일과 종료 시각을 무엇으로 주든 가장 최근 봉부터 온다. 시작일·시작 시각은 (종료일을 날짜로 줬을 때) 적용된다. 모두 HTTP 200, 오류 코드 없음.
