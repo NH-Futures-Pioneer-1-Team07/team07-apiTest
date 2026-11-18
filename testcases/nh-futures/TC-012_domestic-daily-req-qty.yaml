@@ -1,0 +1,16 @@
+id: TC-012
+name: 국내 일봉 req_qty 최대 999건
+description: 최신 명세(2026-11-19 엑셀)는 국내 일봉 req_qty 최대 999건이다. 999 이하는 요청한 만큼, 넘으면 999건까지만 오거나 오류로 거절되어야 한다. 연결 일봉으로 조회해 데이터가 충분하게 한다. 2026-11-19 확인 시 1000 → 1000건, 3000 → 1194건이 왔다.
+tags: [시세, 경계값]
+steps:
+  - name: 연결 일봉 조회
+    api: domestic_chart-daily
+    body: {nght_tp: "1", sym: A676C000, cidx_yn: "1"}
+    each:
+      - {req_qty: "999"}
+      - {req_qty: "1000"}
+      - {req_qty: "3000"}
+    expect:
+      - status: 200
+      - error_code: none
+      - count: {path: Occurs1, eq: "min(${req_qty}, 999)"}

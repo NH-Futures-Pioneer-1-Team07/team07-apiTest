@@ -1,0 +1,16 @@
+id: NH-010
+title: 모의 환경은 장 종료 후에도 마지막 시세로 체결
+apis:
+- domestic_order
+team: 미상
+first_seen: '-'
+reported_at: null
+answered_at: '2026-11-13'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: 원 제보 없음. 답변만 받음.
+nh_answer: 모의 환경은 24시간 주문·체결 가능. 장 종료 뒤에는 마지막 시세 기준으로 체결 가능한 가격이면 체결.
+rules: []
+pending:
+- NH-009(해외는 장 시간 밖 거절)와 범위가 다름. 국내만 해당하는지 확인
+cases: []

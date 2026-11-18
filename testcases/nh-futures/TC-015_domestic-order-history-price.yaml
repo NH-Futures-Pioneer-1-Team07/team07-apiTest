@@ -1,0 +1,14 @@
+id: TC-015
+name: 국내 주문내역 체결가 확인 (미사용 필드 제외)
+description: 체결된 주문은 체결가격(occurs1_exec_pric)이 0보다 커야 한다. 평균체결가격 등은 미사용 필드라 보지 않는다(NH-003).
+tags: [계좌]
+issue: NH-003
+issue_result: success
+steps:
+  - name: 체결 주문내역 조회
+    api: domestic_order-history
+    body: {trd_div: "0", exec_div: "1", trd_tm_div_cd: "0", ord_div_cd: "0"}
+    expect:
+      - status: 200
+      - error_code: none
+      - rows: {path: Occurs1, when: "occurs1_exec_qty > 0", rule: "occurs1_exec_pric > 0"}

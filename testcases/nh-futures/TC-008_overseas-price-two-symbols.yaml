@@ -1,0 +1,12 @@
+id: TC-008
+name: 해외 현재가 2종목 동시 요청
+description: Iccurs1 에 종목 2개를 넣는다. 지원하지 않으면 오류 코드가 와야 한다. 지금은 HTTP 200 과 빈 본문이 온다(NH-012, 1종목만 지원).
+tags: [시세]
+issue: NH-012
+issue_result: fail
+steps:
+  - name: 2종목 요청
+    api: overseas_price
+    body: {Iccurs1: [{iccurs1_exch_cd: FCME, iccurs1_sym: ZNZ26}, {iccurs1_exch_cd: FCME, iccurs1_sym: ZFZ26}]}
+    expect:
+      - json: true

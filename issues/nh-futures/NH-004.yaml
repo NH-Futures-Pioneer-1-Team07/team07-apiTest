@@ -1,0 +1,18 @@
+id: NH-004
+title: 잘못된 거래소 코드에 오류 없이 빈 줄 반환
+apis:
+- overseas_price
+team: team-02
+first_seen: '2026-11-02'
+reported_at: '2026-11-03'
+answered_at: '2026-11-04'
+report_status: 답변 받음
+conclusion: NH 확인 중
+symptom: FHKEX + MHIX26 → HTTP 200, 오류 없음, 모든 칸이 빈 1줄. 올바른 FHKE 는 정상, 없는 종목은 400 ETR029.
+nh_answer: 거래소 코드는 종목 마스터 3번째 칸(ExchName) 값을 그대로 쓸 것. 잘못된 거래소 코드에 빈 줄을 주는 동작은 내부 확인 중.
+rules:
+- 해외 거래소 코드는 종목 마스터 ExchName 값 사용
+pending:
+- 서버 동작이 바뀌는지 재확인
+- 해외 호가·차트·품목세부도 같은지
+cases: []

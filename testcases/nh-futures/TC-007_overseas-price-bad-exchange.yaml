@@ -1,0 +1,19 @@
+id: TC-007
+name: 해외 현재가 잘못된 거래소 코드
+description: 없는 거래소 코드로 조회하면 오류 코드로 거절되어야 한다. 지금은 HTTP 200 과 빈 줄이 온다(NH-004, NH 확인 중). 고쳐지면 "NH 설명과 달라짐"으로 보인다. 먼저 올바른 코드로 종목이 살아 있는지 확인한다.
+tags: [시세, negative]
+issue: NH-004
+issue_result: fail
+steps:
+  - name: 올바른 거래소 코드로 조회 (대조군)
+    api: overseas_price
+    body: {Iccurs1: [{iccurs1_exch_cd: FCME, iccurs1_sym: ZNZ26}]}
+    expect:
+      - status: 200
+      - rows_not_blank: {path: Occurs1, fields: [occurs1_sym, occurs1_last_pric]}
+  - name: 없는 거래소 코드로 조회
+    api: overseas_price
+    body: {Iccurs1: [{iccurs1_exch_cd: FCMEX, iccurs1_sym: ZNZ26}]}
+    expect:
+      - status: 4xx
+      - field: {path: errorCode, not_empty: true}

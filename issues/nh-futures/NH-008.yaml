@@ -1,0 +1,17 @@
+id: NH-008
+title: 응답 10초 초과·무응답 다수
+apis:
+- domestic_chart-minute
+team: team-04
+first_seen: '2026-11-09'
+reported_at: '2026-11-09'
+answered_at: '2026-11-12'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: 21분 동안 157회 중 48회 10초 안에 응답 없음. 최대 65.4초.
+nh_answer: 오래된 날짜 첫 조회가 느림 (최대 약 20초). 넘으면 504 EGW032. 읽기 제한 시간 30초, EGW032 는 10초 뒤 재시도.
+rules:
+- 조회 API 읽기 제한 시간 30초
+- 504 EGW032 는 10초 뒤 재시도
+pending: []
+cases: []

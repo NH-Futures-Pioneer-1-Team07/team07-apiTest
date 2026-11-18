@@ -1,0 +1,17 @@
+id: NH-002
+title: expires_in 이 String이 아니라 Number
+apis:
+- token
+team: team-07
+first_seen: '2026-10-25'
+reported_at: '2026-10-25'
+answered_at: '2026-10-26'
+report_status: 답변 받음
+conclusion: 명세 수정 예정
+symptom: 명세는 String, 실제 응답은 따옴표 없는 숫자 86400.
+nh_answer: 모의·실전 모두 숫자. 서버는 그대로 두고 명세 타입(String → Number)과 응답 예시를 고칠 예정.
+rules:
+- expires_in 은 명세대로 String 으로 판정 (2026-11-19 부터 서버가 문자열 "86400" 으로 줌)
+pending:
+- '2026-11-19 확인: 최신 엑셀 명세는 여전히 String, 서버 응답도 문자열 "86400" 으로 바뀌어 명세와 일치. NH 답변(서버 유지, 명세를 Number 로)과 반대로 서버가 바뀐 것인지 NH에 확인 후 결론 정리'
+cases: []

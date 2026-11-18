@@ -1,0 +1,17 @@
+id: NH-011
+title: 주문 응답 후 거래소 접수까지 30초
+apis:
+- domestic_order
+- domestic_order-history
+team: team-04
+first_seen: '2026-11-12'
+reported_at: '2026-11-12'
+answered_at: '2026-11-13'
+report_status: 답변 받음
+conclusion: 모의 환경 한정
+symptom: 15:31:00 주문 응답 정상 → 5초간 「미접수」 → 15:31:30 접수·체결.
+nh_answer: 모의 서버가 가끔 불안정. 주문 응답이 정상이면 주문은 들어간 것. 접수·체결·거부가 확인될 때까지 기다릴 것.
+rules:
+- 주문 후 「미접수」는 대기 상태로 보고 반복 조회
+pending: []
+cases: []

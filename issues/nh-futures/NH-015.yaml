@@ -1,0 +1,29 @@
+id: NH-015
+title: 국내 일봉 req_qty 가 명세 최대 999건을 넘어도 그대로 반환 (최대 1194건)
+apis:
+- domestic_chart-daily
+team: team-07
+first_seen: '2026-11-19'
+reported_at: null
+answered_at: null
+report_status: 발견
+conclusion: null
+symptom: |
+  최신 명세(2026-11-19 엑셀)는 req_qty 「기본 300건 (최대 999건)」인데, 999 를 넘는 요청도 거절하지 않고 더 많이 준다.
+  재현 요청: {"nght_tp":"1","sym":"A676C000","cidx_yn":"1","req_qty":"N"} (10년 국채선물 연결 일봉)
+  - req_qty 999 → 999건
+  - req_qty 1000 → 1000건 (nxt_key 20221013)
+  - req_qty 1194·1200·1500·2000·3000 → 모두 1194건 (nxt_key 20211227, 이어 받을 데이터 있음)
+  기대 결과: 999건까지만 오거나, 최대값을 넘는 요청은 오류 코드로 거절
+  영향: 명세의 최대값을 믿고 만든 코드와 실제 응답 건수가 다름. 실제 상한(1194)은 명세에 없고, 잘렸다는 안내도 없음
+  확인일: 2026-11-19 모의 서버
+  재현 기록: issues/nh-futures/evidence/NH-015/README.md
+nh_answer: null
+rules:
+- 국내 일봉은 요청 건수만큼 온다고 가정하지 말고 nxt_key 로 이어 받는다
+pending:
+- 실제 상한이 999 인지 1194 인지, 명세와 서버 중 어느 쪽이 맞는지 NH에 질문
+- 1194 가 건수 제한인지 응답 크기·기간 제한인지
+cases:
+- TC-012
+evidence: issues/nh-futures/evidence/NH-015

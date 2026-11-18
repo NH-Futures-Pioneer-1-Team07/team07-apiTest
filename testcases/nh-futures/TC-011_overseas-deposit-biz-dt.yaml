@@ -1,0 +1,27 @@
+id: TC-011
+name: 해외 예수금 biz_dt 생략·빈 값·날짜
+description: 선택 항목 biz_dt 를 빼면 당일 기준 정상, 빈 문자열이면 400 ETR018, 날짜를 넣으면 정상(NH-013).
+tags: [계좌, 선택항목]
+issue: NH-013
+issue_result: success
+steps:
+  - name: biz_dt 생략
+    api: overseas_deposit
+    body: {cur_cd: USD, cvs_div: "1"}
+    extract: {biz_dt: biz_dt}
+    expect:
+      - status: 200
+      - error_code: none
+      - field: {path: biz_dt, regex: '\d{8}'}
+  - name: biz_dt 빈 문자열
+    api: overseas_deposit
+    body: {biz_dt: "", cur_cd: USD, cvs_div: "1"}
+    expect:
+      - status: 400
+      - error_code: ETR018
+  - name: biz_dt 날짜 지정
+    api: overseas_deposit
+    body: {biz_dt: "${biz_dt}", cur_cd: USD, cvs_div: "1"}
+    expect:
+      - status: 200
+      - error_code: none

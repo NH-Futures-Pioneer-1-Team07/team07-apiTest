@@ -1,0 +1,17 @@
+id: NH-012
+title: 종목 2개 요청 시 HTTP 200 + 빈 본문
+apis:
+- overseas_price
+team: team-04
+first_seen: '2026-11-01'
+reported_at: '2026-11-16'
+answered_at: '2026-11-17'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: Iccurs1 에 2종목 → HTTP 200, 본문이 빈 문자열. 1종목은 정상.
+nh_answer: 한 번에 한 종목만 요청할 것. 명세는 확인해 보겠음.
+rules:
+- 해외_현재가는 1종목씩 요청
+pending:
+- 명세 반영 여부
+cases: []

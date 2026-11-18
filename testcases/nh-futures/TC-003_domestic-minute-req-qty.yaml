@@ -1,0 +1,19 @@
+id: TC-003
+name: 국내 분봉 req_qty 상한
+description: req_qty 를 1000·2000·2001·9999 로 바꿔 부른다. NH 답변(NH-001)대로 2000건까지만 오는지 확인한다. 상한이 바뀌면 "NH 설명과 달라짐"으로 보인다.
+tags: [시세, 경계값]
+issue: NH-001
+issue_result: success
+steps:
+  - name: 1분봉 조회
+    api: domestic_chart-minute
+    body: {nght_tp: "1", sym: A676C000, dcnt: "1"}
+    each:
+      - {req_qty: "1000"}
+      - {req_qty: "2000"}
+      - {req_qty: "2001"}
+      - {req_qty: "9999"}
+    expect:
+      - status: 200
+      - error_code: none
+      - count: {path: Occurs1, eq: "min(${req_qty}, 2000)"}

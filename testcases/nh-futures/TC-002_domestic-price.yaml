@@ -1,0 +1,14 @@
+id: TC-002
+name: 국내 현재가 정상 조회
+description: 10년 국채선물 2026년 12월물 현재가. 필수 필드와 가격 형식, 응답 시간을 확인한다.
+tags: [시세, 정상]
+steps:
+  - name: 현재가 조회
+    api: domestic_price
+    body: {sym: A676C000}
+    expect:
+      - status: 200
+      - error_code: none
+      - field: {path: sym_nm, not_empty: true}
+      - field: {path: last_pric, regex: '\d+(\.\d+)?'}
+      - duration_ms: {lte: 3000}

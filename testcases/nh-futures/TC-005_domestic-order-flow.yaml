@@ -1,0 +1,61 @@
+id: TC-005
+name: "국내 주문 흐름: 신규 → 정정 → 취소"
+description: 현재가보다 2% 낮은 지정가로 1계약 매수 주문을 내고, 접수를 확인한 뒤 가격을 정정하고 취소한다. 주문 응답 뒤 「미접수」는 대기 상태로 보고 최대 60초 기다린다(NH-011). 중간에 실패하면 남은 주문을 취소한다.
+tags: [주문, 시나리오]
+when: [국내 주간장]
+steps:
+  - name: 현재가 조회
+    api: domestic_price
+    body: {sym: A676C000}
+    extract:
+      buy_price: {path: last_pric, expr: "floor(value * 0.98 * 100) / 100", format: "{:.2f}"}
+      new_price: {path: last_pric, expr: "floor(value * 0.975 * 100) / 100", format: "{:.2f}"}
+    expect:
+      - status: 200
+      - field: {path: last_pric, gt: 0}
+  - name: 신규주문 (지정가 매수 1계약, 현재가 -2%)
+    api: domestic_order
+    body: {sym: A676C000, trd_div: "1", ord_tp_cd: "1", ord_qty: "1", ord_pric: "${buy_price}", exec_cnd_cd: "1"}
+    extract: {ord_no: ord_no}
+    expect:
+      - status: 200
+      - error_code: none
+      - field: {path: ord_no, not_empty: true}
+  - name: 주문내역에서 접수 확인
+    api: domestic_order-history
+    body: {trd_div: "0", exec_div: "0", trd_tm_div_cd: "0", ord_div_cd: "0"}
+    select: {path: Occurs1, where: {occurs1_ord_no: "${ord_no}"}}
+    wait_until: {path: row.occurs1_ord_sts, in: ["1", "3", "4", "6", "8", "9"], interval_s: 1, timeout_s: 60}
+    expect:
+      - status: 200
+      - field: {path: row.occurs1_ord_sts, in: ["1", "3"], note: "1:접수, 3:확인"}
+  - name: 가격 정정 (현재가 -2.5%)
+    api: domestic_modify
+    body: {sym: A676C000, trd_div: "1", ord_tp_cd: "1", ord_qty: "1", ord_pric: "${new_price}", exec_cnd_cd: "1", org_ord_no: "${ord_no}"}
+    extract: {mod_ord_no: ord_no}
+    expect:
+      - status: 200
+      - error_code: none
+      - field: {path: ord_no, not_empty: true}
+  - name: 취소
+    api: domestic_cancel
+    body: {sym: A676C000, trd_div: "1", ord_qty: "1", org_ord_no: "${mod_ord_no}"}
+    expect:
+      - status: 200
+      - error_code: none
+  - name: 주문내역에서 잔량 0 확인
+    api: domestic_order-history
+    body: {trd_div: "0", exec_div: "0", trd_tm_div_cd: "0", ord_div_cd: "0"}
+    select: {path: Occurs1, where: {occurs1_ord_no: "${mod_ord_no}"}}
+    wait_until: {path: row.occurs1_rem_ord_qty, eq: 0, interval_s: 1, timeout_s: 60}
+    expect:
+      - field: {path: row.occurs1_rem_ord_qty, eq: 0}
+cleanup:
+  - name: (정리) 정정된 주문 취소
+    api: domestic_cancel
+    if_failed: true
+    body: {sym: A676C000, trd_div: "1", ord_qty: "1", org_ord_no: "${mod_ord_no}"}
+  - name: (정리) 원주문 취소
+    api: domestic_cancel
+    if_failed: true
+    body: {sym: A676C000, trd_div: "1", ord_qty: "1", org_ord_no: "${ord_no}"}

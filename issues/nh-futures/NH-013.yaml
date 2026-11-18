@@ -1,0 +1,16 @@
+id: NH-013
+title: 선택 항목 biz_dt 를 빈 문자열로 보내면 400 ETR018
+apis:
+- overseas_deposit
+team: team-04
+first_seen: '2026-11-01'
+reported_at: '2026-11-16'
+answered_at: '2026-11-17'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: '"biz_dt": "" → 400 ETR018. 키를 빼면 당일 기준 정상.'
+nh_answer: 항목이 있으면 YYYYMMDD 형식으로 검사. 날짜를 지정하지 않으려면 키 자체를 뺄 것.
+rules:
+- 선택 항목은 빈 문자열 대신 키를 뺌
+pending: []
+cases: []

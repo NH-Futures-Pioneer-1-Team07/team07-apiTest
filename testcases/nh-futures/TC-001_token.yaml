@@ -1,0 +1,15 @@
+id: TC-001
+name: 접근토큰 발급 정상
+description: 토큰 발급 응답 필드와 타입을 확인한다. expires_in 은 명세(String)대로 문자열을 정상으로 본다. NH-002 때는 숫자로 왔지만 2026-11-19 부터 문자열로 온다. 다시 숫자로 오면 "NH 설명과 달라짐"으로 보인다.
+tags: [인증]
+issue: NH-002
+issue_result: success
+steps:
+  - name: 토큰 발급
+    api: token
+    expect:
+      - status: 200
+      - field: {path: access_token, not_empty: true}
+      - field: {path: token_type, eq: Bearer}
+      - field: {path: scopes, in: [S, R]}
+      - field: {path: expires_in, type: string, note: "명세 String, NH-002"}

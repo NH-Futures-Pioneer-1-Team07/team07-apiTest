@@ -1,0 +1,25 @@
+id: TC-006
+name: 국내 신규주문 필수값 ord_qty 누락
+description: 필수값 ord_qty 를 빼고 주문한다. 4xx 와 오류 코드로 거절되어야 한다. 혹시 접수되면 체결되지 않도록 현재가 -2% 지정가로 보내고, 정리 단계에서 취소한다.
+tags: [주문, negative]
+when: [국내 주간장]
+steps:
+  - name: 현재가 조회
+    api: domestic_price
+    body: {sym: A676C000}
+    extract:
+      buy_price: {path: last_pric, expr: "floor(value * 0.98 * 100) / 100", format: "{:.2f}"}
+    expect:
+      - status: 200
+  - name: ord_qty 없이 주문
+    api: domestic_order
+    body: {sym: A676C000, trd_div: "1", ord_tp_cd: "1", ord_pric: "${buy_price}", exec_cnd_cd: "1"}
+    extract: {ord_no: ord_no}
+    expect:
+      - status: 4xx
+      - field: {path: errorCode, not_empty: true}
+cleanup:
+  - name: (정리) 잘못 접수된 주문 취소
+    api: domestic_cancel
+    if_failed: true
+    body: {sym: A676C000, trd_div: "1", ord_qty: "1", org_ord_no: "${ord_no}"}

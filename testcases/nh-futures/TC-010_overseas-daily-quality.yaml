@@ -1,0 +1,19 @@
+id: TC-010
+name: 해외 연결 일봉 데이터 품질 (2023-01-12 이후)
+description: 2023-01-12 이후 봉에서 저가 ≤ 시가·종가 ≤ 고가 인지 본다. 모의 서버의 그 이전 데이터는 알려진 문제라 보지 않는다(NH-006). 서버가 inq_strt_dt 를 무시하고 1998년까지 주기 때문에 판정에서 날짜로 거른다.
+tags: [시세, 데이터품질]
+issue: NH-006
+issue_result: success
+steps:
+  - name: ZN 연결 일봉
+    api: overseas_chart-daily
+    body: {exch_cd: FCME, sym: ZNZ26, inq_strt_dt: "20230112", inq_ed_dt: "99999999", req_qty: "2000", cidx_yn: "1", nxt_key: "99999999"}
+    paginate:
+      next_key: nxt_key
+      rows: Occurs1
+      max_pages: 30
+      expect_all:
+        - count: {path: rows, gte: 100}
+        - rows: {path: rows, when: "occurs1_ref_dt >= 20230112", rule: "occurs1_low_pric <= occurs1_open_pric <= occurs1_high_pric and occurs1_low_pric <= occurs1_close_pric <= occurs1_high_pric"}
+    expect:
+      - status: 200

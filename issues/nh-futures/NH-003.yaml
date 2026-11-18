@@ -1,0 +1,17 @@
+id: NH-003
+title: 전량체결 주문의 평균체결가격이 0
+apis:
+- domestic_order-history
+team: team-10
+first_seen: '2026-10-27'
+reported_at: '2026-10-27'
+answered_at: '2026-10-28'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: 전량체결 주문의 occurs1_avg_exec_pric 가 0. 체결가격은 107.85 로 정상.
+nh_answer: occurs1_avg_exec_pric, occurs1_per_exec_qty, occurs1_ptt_exec_cnt 는 미사용 필드로 0이 맞음. 문서에서 제거 예정. 체결가는 occurs1_exec_pric, 평균단가는 잔고 조회 occurs1_avg_pric.
+rules:
+- 세 필드는 값 검증 제외
+- 체결가는 occurs1_exec_pric 사용
+pending: []
+cases: []

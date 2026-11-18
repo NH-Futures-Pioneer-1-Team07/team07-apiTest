@@ -1,0 +1,18 @@
+id: NH-007
+title: 분봉 시각 기준 문의 (KST)
+apis:
+- overseas_chart-minute
+- FA
+team: 미상
+first_seen: '-'
+reported_at: null
+answered_at: '2026-11-06'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: 원 제보 없음. 답변만 받음.
+nh_answer: occurs1_ref_dt, occurs1_exch_tm 은 거래소와 관계없이 KST. FA와 맞출 때는 ko_exec_tm.
+rules:
+- 차트 시각은 KST, FA는 ko_exec_tm 기준
+pending:
+- 원 제보 확인
+cases: []

@@ -1,0 +1,13 @@
+id: TC-014
+name: 국내 잔고 조회 정상
+description: 잔고 응답 형식을 확인한다. 보유 수량이 있는 행은 평균가격이 0보다 커야 한다.
+tags: [계좌, 정상]
+steps:
+  - name: 잔고 조회
+    api: domestic_open-interest
+    body: {}
+    expect:
+      - status: 200
+      - error_code: none
+      - field: {path: nrec, exists: true}
+      - rows: {path: Occurs1, when: "occurs1_opint_qty > 0", rule: "occurs1_avg_pric > 0"}

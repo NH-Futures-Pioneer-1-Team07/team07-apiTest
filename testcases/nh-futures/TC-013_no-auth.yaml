@@ -1,0 +1,12 @@
+id: TC-013
+name: 인증 없이 국내 현재가 호출
+description: Authorization 헤더 없이 부른다. 401 계열과 오류 코드로 거절되어야 한다.
+tags: [인증, negative]
+steps:
+  - name: 토큰 없이 조회
+    api: domestic_price
+    auth: false
+    body: {sym: A676C000}
+    expect:
+      - status: 4xx
+      - field: {path: errorCode, not_empty: true}

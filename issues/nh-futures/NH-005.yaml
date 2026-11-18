@@ -1,0 +1,17 @@
+id: NH-005
+title: 마지막 페이지 nxt_key 로 재요청하면 첫 페이지가 다시 옴
+apis:
+- overseas_chart-minute
+team: team-04
+first_seen: '2026-11-01'
+reported_at: '2026-11-05'
+answered_at: '2026-11-06'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: 마지막 페이지의 nxt_key 가 9로만 된 32자리 → 이 값으로 요청하면 첫 페이지(최근 봉)부터 다시 옴.
+nh_answer: 9로만 된 키는 기본값 99999999 와 같게 처리됨. 응답 nxt_key 가 9로만 되어 있으면 마지막 페이지로 보고 멈출 것.
+rules:
+- 응답 nxt_key 가 9로만 되어 있으면 마지막 페이지
+pending:
+- 국내 차트, 해외 일봉도 같은 종료 규칙인지
+cases: []

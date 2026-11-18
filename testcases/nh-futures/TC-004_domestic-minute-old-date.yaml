@@ -1,0 +1,19 @@
+id: TC-004
+name: 국내 분봉 오래된 날짜 첫 조회 응답 시간
+description: 약 60일 전 하루치 1분봉을 사흘 연속으로 조회한다(주말이 끼어도 평일이 들어가게). 오래된 날짜는 처음 조회할 때 최대 20초 걸리고, 넘으면 504 EGW032 가 온다(NH-008). 제한 시간 30초, EGW032 는 10초 뒤 한 번 다시 보낸다.
+tags: [시세, 성능]
+issue: NH-008
+issue_result: success
+steps:
+  - name: 오래된 하루치 조회
+    api: domestic_chart-minute
+    body: {nght_tp: "1", sym: A656C000, dcnt: "1", req_qty: "2000"}
+    each:
+      - {inq_strt_dt: "${days_ago:60}", inq_ed_dt: "${days_ago:60}"}
+      - {inq_strt_dt: "${days_ago:61}", inq_ed_dt: "${days_ago:61}"}
+      - {inq_strt_dt: "${days_ago:62}", inq_ed_dt: "${days_ago:62}"}
+    timeout_s: 30
+    expect:
+      - status: 200
+      - error_code: none
+      - duration_ms: {lte: 30000}

@@ -1,0 +1,18 @@
+id: NH-009
+title: 장 마감 시간 주문에 원인 불명 5016 오류
+apis:
+- overseas_order
+team: team-04
+first_seen: '2026-11-08'
+reported_at: '2026-11-09'
+answered_at: '2026-11-12'
+report_status: 답변 받음
+conclusion: 의도된 동작
+symptom: 일요일 17:15 (CME 휴장) 주문 → 400 5016 「[거래소주문전송중 오류발생] 모듈 처리중 오류」. 주문 미접수.
+nh_answer: 장이 닫혀서 거절됨. 모의 해외 주문은 07:00~24:00 + 거래소 장. CME는 토 07:00~월 08:00, 매일 07:00~08:00 KST 휴장. 같은 주문 반복 전송 금지.
+rules:
+- 주문 API 자동 재시도 금지
+- 해외 주문 전 장 운영 시간 확인
+pending:
+- 오류 메시지 개선 요청은 답 없음
+cases: []
